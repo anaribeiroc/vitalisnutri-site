@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Nutricionista</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #4CAF50;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      width: 600px;
+      text-align: center;
+    }
+
+    .container img {
+      width: 165px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    input {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 15px;
+      width: 100%;
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .row input {
+      flex: 1;
+    }
+
+    button, .verCadastros {
+      background-color: #8BC34A;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-top: 10px;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    button:hover, .verCadastros:hover {
+      background-color: rgb(22, 72, 32);
+    }
+    select {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    }
+    button, .verCadastros {
+    background-color: #8BC34A;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+    text-decoration: none;
+    display: block;       
+    width: 100%;         
+    text-align: center; 
+    box-sizing: border-box;
+    }
+
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="imagens/vitali.png" alt="Logo">
+    <h1>Cadastrar Paciente</h1>
+    <form id="cadastroForm">
+      <input type="text" id="nome" placeholder="Nome completo" required>
+      <div class="row">
+        <input type="number" id="peso" placeholder="Peso (kg)" required step="any">
+        <input type="number" id="idade" placeholder="Idade" required>
+      </div>
+      <div class="row">
+        <input type="number" id="altura" placeholder="Altura (m)" required step="any">
+        <select id="sexo" required>
+            <option value="" disabled selected>Selecione o sexo</option>
+            <option value="Feminino">Feminino</option>
+            <option value="Masculino">Masculino</option>
+          </select>
+          
+      </div>
+      <div class="row">
+        <input type="tel" id="telefone" placeholder="Telefone">
+        <input type="email" id="email" placeholder="E-mail" required>
+      </div>
+      <input type="text" id="endereco" placeholder="Endereço">
+      <button type="submit" id="btnCadastrar">Salvar cliente</button>
+    </form>
+
+    <a href="cadastrado.html" class="verCadastros">Ver pacientes cadastrados</a>
+  </div>
+  <script>
+    const form = document.getElementById('cadastroForm');
+  
+    let pacientes = JSON.parse(localStorage.getItem('pacientes')) || [];
+  
+    function salvarPacientes() {
+      localStorage.setItem('pacientes', JSON.stringify(pacientes));
+    }
+  
+    function calcularIMC(peso, altura, sexo) {
+  const imc = (peso / (altura * altura)).toFixed(2);
+  let classificacao = '';
+
+  if (sexo === 'Masculino') {
+    if (imc < 20) classificacao = 'Abaixo do peso';
+    else if (imc < 25) classificacao = 'Peso normal';
+    else if (imc < 30) classificacao = 'Sobrepeso';
+    else classificacao = 'Obesidade';
+  } else if (sexo === 'Feminino') {
+    if (imc < 19) classificacao = 'Abaixo do peso';
+    else if (imc < 24) classificacao = 'Peso normal';
+    else if (imc < 29) classificacao = 'Sobrepeso';
+    else classificacao = 'Obesidade';
+  } else {
+    classificacao = 'Classificação não definida';
+  }
+
+  return { imc, classificacao };
+}
+
+  
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+  
+      const paciente = {
+        nome: document.getElementById('nome').value.trim(),
+        peso: parseFloat(document.getElementById('peso').value),
+        altura: parseFloat(document.getElementById('altura').value),
+        idade: parseInt(document.getElementById('idade').value),
+        sexo: document.getElementById('sexo').value.trim(),
+        telefone: document.getElementById('telefone').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        endereco: document.getElementById('endereco').value.trim()
+      };
+  
+      const { imc, classificacao } = calcularIMC(paciente.peso, paciente.altura);
+      paciente.imc = imc;
+      paciente.classificacao = classificacao;
+  
+      pacientes.push(paciente);
+      salvarPacientes();
+      form.reset();
+      alert("Paciente cadastrado com sucesso!");
+    });
+  </script>
+  
+</body>
+</html>

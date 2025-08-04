@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Pacientes Cadastrados</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #4CAF50;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      width: 600px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .container img {
+      width: 165px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 30px;
+    }
+
+    .paciente {
+      background-color: #8BC34A;
+      color: white;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .paciente:hover {
+      background-color: rgb(22, 72, 32);
+    }
+
+    .detalhes {
+      background-color: #f1f1f1;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 8px;
+      font-size: 14px;
+      display: none;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="imagens/vitali.png" alt="Logo">
+    <h1>Pacientes Cadastrados</h1>
+    <div id="listaPacientes"></div>
+  </div>
+
+  <script>
+    const lista = document.getElementById('listaPacientes');
+    let pacientes = JSON.parse(localStorage.getItem('pacientes')) || [];
+  
+    function salvarPacientes() {
+      localStorage.setItem('pacientes', JSON.stringify(pacientes));
+    }
+  
+    function renderizarPacientes() {
+      lista.innerHTML = '';
+  
+      if (pacientes.length === 0) {
+        lista.innerHTML = "<p>Nenhum paciente cadastrado.</p>";
+        return;
+      }
+  
+      pacientes.forEach((p, i) => {
+        const div = document.createElement('div');
+        div.className = 'paciente';
+        div.textContent = p.nome;
+  
+        const detalhes = document.createElement('div');
+        detalhes.className = 'detalhes';
+        detalhes.innerHTML = `
+          <strong>Idade:</strong> ${p.idade}<br>
+          <strong>Sexo:</strong> ${p.sexo}<br>
+          <strong>Peso:</strong> ${p.peso} kg<br>
+          <strong>Altura:</strong> ${p.altura} m<br>
+          <strong>IMC:</strong> ${p.imc} (${p.classificacao})<br>
+          <strong>Telefone:</strong> ${p.telefone}<br>
+          <strong>Email:</strong> ${p.email}<br>
+          <strong>Endereço:</strong> ${p.endereco}<br><br>
+          <button onclick="editarPaciente(${i})">Editar</button>
+          <button onclick="excluirPaciente(${i})" style="margin-left:10px;">Excluir</button>
+        `;
+  
+        div.addEventListener('click', () => {
+          detalhes.style.display = detalhes.style.display === 'none' ? 'block' : 'none';
+        });
+  
+        lista.appendChild(div);
+        lista.appendChild(detalhes);
+      });
+    }
+  
+    function excluirPaciente(index) {
+      if (confirm("Tem certeza que deseja excluir este paciente?")) {
+        pacientes.splice(index, 1);
+        salvarPacientes();
+        renderizarPacientes();
+      }
+    }
+  
+    function editarPaciente(index) {
+      const p = pacientes[index];
+      const novoNome = prompt("Nome:", p.nome);
+      const novaIdade = prompt("Idade:", p.idade);
+      const novoSexo = prompt("Sexo (Feminino/Masculino):", p.sexo);
+      const novoPeso = prompt("Peso (kg):", p.peso);
+      const novaAltura = prompt("Altura (m):", p.altura);
+      const novoTelefone = prompt("Telefone:", p.telefone);
+      const novoEmail = prompt("Email:", p.email);
+      const novoEndereco = prompt("Endereço:", p.endereco);
+  
+      if (novoNome && novaIdade && novoSexo && novoPeso && novaAltura && novoEmail) {
+        p.nome = novoNome.trim();
+        p.idade = parseInt(novaIdade);
+        p.sexo = novoSexo.trim();
+        p.peso = parseFloat(novoPeso);
+        p.altura = parseFloat(novaAltura);
+        p.telefone = novoTelefone.trim();
+        p.email = novoEmail.trim();
+        p.endereco = novoEndereco.trim();
+  
+        // Recalcular IMC
+        const imc = (p.peso / (p.altura * p.altura)).toFixed(2);
+        let classificacao = '';
+  
+        if (p.sexo === 'Masculino') {
+          if (imc < 20) classificacao = 'Abaixo do peso';
+          else if (imc < 25) classificacao = 'Peso normal';
+          else if (imc < 30) classificacao = 'Sobrepeso';
+          else classificacao = 'Obesidade';
+        } else if (p.sexo === 'Feminino') {
+          if (imc < 19) classificacao = 'Abaixo do peso';
+          else if (imc < 24) classificacao = 'Peso normal';
+          else if (imc < 29) classificacao = 'Sobrepeso';
+          else classificacao = 'Obesidade';
+        } else {
+          classificacao = 'Classificação não definida';
+        }
+  
+        p.imc = imc;
+        p.classificacao = classificacao;
+  
+        salvarPacientes();
+        renderizarPacientes();
+      }
+    }
+  
+    renderizarPacientes();
+  </script>
+  
+</body>
+</html>

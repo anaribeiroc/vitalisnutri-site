@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vitalis Nutri</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .container {
+      display: flex;
+      height: 100vh;
+    }
+
+    .left-panel {
+      background-color: #8bc14d;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-align: center;
+    }
+
+    .left-panel img {
+      width: 750px;
+      height: 350px;
+      margin-bottom: 10px;
+    }
+
+    .left-panel h1 {
+      font-size: 28px;
+      margin: 0;
+    }
+
+    .left-panel p {
+      font-size: 18px;
+      margin: 5px 0;
+    }
+
+    .right-panel {
+      flex: 1;
+      background-color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .right-panel h2 {
+      font-size: 26px;
+      margin-bottom: 10px;
+    }
+
+    .right-panel p {
+      font-size: 18px;
+      margin-bottom: 30px;
+    }
+
+    .button-container {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .button {
+      background-color: #8BC34A;
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      width: 160px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transition: background-color 0.3s;
+    }
+
+    .button:hover {
+      background-color: #7CB342;
+    }
+
+    .button img {
+      width: 50px;
+      margin-bottom: 10px;
+    }
+
+    .button p {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .left-panel img {
+        width: 80%;
+        height: auto;
+      }
+
+      .button-container {
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .button {
+        width: 80%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="left-panel">
+      <img src="imagens/vitali.png" alt="Logo Vitalis Nutri">
+    </div>
+    <div class="right-panel">
+      <h2>Painel de administração</h2>
+      <p>O que te trouxe aqui?</p>
+      <div class="button-container">
+        <div class="button" id="btnCadastrar">
+          <img src="imagens/1 (1).png" alt="Cadastrar paciente">
+          <p>Cadastrar paciente</p>
+        </div>
+        <div class="button" id="btnPacientes">
+          <img src="imagens/2 (1).png" alt="Pacientes cadastrados">
+          <p>Pacientes cadastrados</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.getElementById("btnCadastrar").addEventListener("click", function () {
+      window.location.href = "pagCadastro.html";
+    });
+    document.getElementById("btnPacientes").addEventListener("click", function () {
+      window.location.href = "cadastrado.html";
+    });
+  </script>
+</body>
+</html>
