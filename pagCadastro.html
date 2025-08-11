@@ -136,26 +136,32 @@
       localStorage.setItem('pacientes', JSON.stringify(pacientes));
     }
   
-    function calcularIMC(peso, altura, sexo) {
-  const imc = (peso / (altura * altura)).toFixed(2);
+    function calcularIMC(peso, altura) {
+  const imc = peso / (altura * altura);
+
+  const imcFormatado = imc.toFixed(2);
   let classificacao = '';
 
-  if (sexo === 'Masculino') {
-    if (imc < 20) classificacao = 'Abaixo do peso';
-    else if (imc < 25) classificacao = 'Peso normal';
-    else if (imc < 30) classificacao = 'Sobrepeso';
-    else classificacao = 'Obesidade';
-  } else if (sexo === 'Feminino') {
-    if (imc < 19) classificacao = 'Abaixo do peso';
-    else if (imc < 24) classificacao = 'Peso normal';
-    else if (imc < 29) classificacao = 'Sobrepeso';
-    else classificacao = 'Obesidade';
+  if (imc < 18.5) {
+    classificacao = 'Abaixo do peso';
+  } else if (imc >= 18.5 && imc < 24.9) {
+    classificacao = 'Peso normal';
+  } else if (imc >= 25 && imc < 29.9) {
+    classificacao = 'Sobrepeso';
+  } else if (imc >= 30) {
+    classificacao = 'Obesidade';
   } else {
-    classificacao = 'Classificação não definida';
+    classificacao = 'Entrada inválida';
   }
 
-  return { imc, classificacao };
+  return {
+    imc: imcFormatado,
+    classificacao: classificacao
+  };
 }
+
+const resultado = calcularIMC(70, 1.75); 
+console.log(resultado);
 
   
     form.addEventListener('submit', function(event) {
